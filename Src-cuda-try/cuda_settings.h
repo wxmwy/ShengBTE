@@ -1,0 +1,1 @@
+#define GPUNUM 2

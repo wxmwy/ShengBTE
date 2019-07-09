@@ -676,7 +676,7 @@ contains
                         velocity(ss,k,:))
                    if(abs(omega+omegap-omegadp).le.(2.d0*sigma)) then
                       fBEdprime=1.d0/(exp(hbar*omegadp/Kb/T)-1.D0)
-                      WP3=(fBEprime-fBEdprime)*&
+                      WP3=(fBEprime-fBEdprime)*& 
                            exp(-(omega+omegap-omegadp)**2/(sigma**2))/sigma/sqrt(Pi)/&
                            (omega*omegap*omegadp)
                       WP3_plus=WP3_plus+WP3

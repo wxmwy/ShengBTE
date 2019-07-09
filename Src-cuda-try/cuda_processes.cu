@@ -251,13 +251,13 @@ __global__ void rta_plus_kernel(int Nbands, double scalebroad, int nptk, double 
     }
 }
 
-__global__ void rta_minus_kernel(int Nbands, double scalebroad, int nptk, double T, double* rlattvec, double* energy, double* velocity, double_complex* eigenvect, int Nlist, int* list, int Ntri,double* Phi, double* R_j, double* R_k, int* Index_i, int* Index_j, int* Index_k, int* IJK, double* Gamma_plus, double* WP3_plus, int* types, double* masses, bool onlyharmonic, int Ngrid0,int Ngrid1,int Ngrid2, int q1, int q2, int q3, double omega,int i, int ll, double* d_debug) {
+__global__ void rta_minus_kernel(int Nbands, double scalebroad, int nptk, double T, double* rlattvec, double* energy, double* velocity, double_complex* eigenvect, int Nlist, int* list, int Ntri,double* Phi, double* R_j, double* R_k, int* Index_i, int* Index_j, int* Index_k, int* IJK, double* Gamma_minus, double* WP3_minus, int* types, double* masses, bool onlyharmonic, int Ngrid0,int Ngrid1,int Ngrid2, int q1, int q2, int q3, double omega,int i, int ll, double* d_debug) {
     int j = threadIdx.x+blockIdx.x*blockDim.x;
     int ii = threadIdx.y+blockIdx.y*blockDim.y;
     int k = threadIdx.z+blockIdx.z*blockDim.z;
     if(j==0&&ii==0&&k==0) {
-        *Gamma_plus = 0.0;
-        *WP3_plus = 0.0;
+        *Gamma_minus = 0.0;
+        *WP3_minus = 0.0;
     }
     __syncthreads();
     if(j>=Nbands || ii>=nptk || k>=Nbands) return;
@@ -298,7 +298,7 @@ __global__ void rta_minus_kernel(int Nbands, double scalebroad, int nptk, double
                         exp(-(tmp1*tmp1)/(sigma*sigma))/
                         sigma/sqrt(pi)/(omega*omegap*omegadp);
             //cuda_atomic_add(WP3_plus, WP3);
-            atomicAdd(WP3_plus, WP3);
+            atomicAdd(WP3_minus, WP3);
             if (!onlyharmonic) { 
                 double_complex Vp=Vp_minus(i,j,k,list[ll]-1,ii,ss,
                                    realqprime0,realqprime1,realqprime2,
@@ -308,7 +308,7 @@ __global__ void rta_minus_kernel(int Nbands, double scalebroad, int nptk, double
                                    masses, types, nptk, Nbands);
 		double absVp = (Vp.x*Vp.x+Vp.y*Vp.y);
 
-        atomicAdd(Gamma_plus,hbarp*pi/double(4)*WP3*absVp);
+        atomicAdd(Gamma_minus,hbarp*pi/double(4)*WP3*absVp);
 
             }
         }
@@ -316,8 +316,8 @@ __global__ void rta_minus_kernel(int Nbands, double scalebroad, int nptk, double
 }
 #endif
 // global device pointers
-double* dGamma_plus;
-double* dWP3_plus;
+double* dGamma;
+double* dWP3;
 double* dvelocity, *denergy, *dPhi, *dR_j, *dR_k, *dmasses;
 double_complex* deigenvect;
 double* drlattvec;
@@ -352,8 +352,8 @@ void init_cuda_rta_(int* _rank, int* _nband, int* _nptk, double* rlattvec, doubl
         HANDLE_ERROR(cudaMalloc((void**)&dIndex_j,sizeof(int)*Ntri));
         HANDLE_ERROR(cudaMalloc((void**)&dIndex_k,sizeof(int)*Ntri));
         HANDLE_ERROR(cudaMalloc((void**)&dIJK,sizeof(int)*nptk*3));
-        HANDLE_ERROR(cudaMalloc((void**)&dGamma_plus,sizeof(double)));
-        HANDLE_ERROR(cudaMalloc((void**)&dWP3_plus,sizeof(double)));
+        HANDLE_ERROR(cudaMalloc((void**)&dGamma,sizeof(double)));
+        HANDLE_ERROR(cudaMalloc((void**)&dWP3,sizeof(double)));
         HANDLE_ERROR(cudaMalloc((void**)&dlist,sizeof(int)*NList));
 
         HANDLE_ERROR(cudaMalloc((void**)&d_debug,sizeof(double)*nptk));
@@ -467,8 +467,8 @@ void run_cuda_rta_plus_(int* _rank, int* _mm, int* _nband, double* _scalebroad, 
     }
     }}
 #else
-        //HANDLE_ERROR(cudaMemset(dGamma_plus,0,sizeof(double)));
-        //HANDLE_ERROR(cudaMemset(dWP3_plus,0,sizeof(double)));
+        //HANDLE_ERROR(cudaMemset(dGamma,0,sizeof(double)));
+        //HANDLE_ERROR(cudaMemset(dWP3,0,sizeof(double)));
 #ifdef DEBUG
         printf("^^ CUDA MEMSET FINISH ^^\n");
 #endif
@@ -477,7 +477,7 @@ void run_cuda_rta_plus_(int* _rank, int* _mm, int* _nband, double* _scalebroad, 
 #ifdef DEBUG
        printf("^^ begin CUDA KERNEL ^^\n");
 #endif
-       rta_plus_kernel<<<blk,blksize>>>(Nbands, scalebroad, nptk, T, drlattvec, denergy, dvelocity, deigenvect, NList, dlist, Ntri, dPhi, dR_j, dR_k,  dIndex_i, dIndex_j, dIndex_k, dIJK, dGamma_plus,dWP3_plus, dtypes, dmasses, onlyharmonic, Ngrid[0],Ngrid[1], Ngrid[2],q[0],q[1],q[2], omega, i, ll, d_debug);
+       rta_plus_kernel<<<blk,blksize>>>(Nbands, scalebroad, nptk, T, drlattvec, denergy, dvelocity, deigenvect, NList, dlist, Ntri, dPhi, dR_j, dR_k,  dIndex_i, dIndex_j, dIndex_k, dIJK, dGamma,dWP3, dtypes, dmasses, onlyharmonic, Ngrid[0],Ngrid[1], Ngrid[2],q[0],q[1],q[2], omega, i, ll, d_debug);
 #ifdef DEBUG
        printf("^^ begin CUDA KERNEL SYNC ^^\n");
 #endif
@@ -516,11 +516,11 @@ void run_cuda_rta_plus_(int* _rank, int* _mm, int* _nband, double* _scalebroad, 
        printf("^^ finish CUDA KERNEL ^^\n");
        printf("^^ begin CUDA MEMCPY OUT wp3_plus ^^\n");
 #endif
-       HANDLE_ERROR(cudaMemcpy(WP3_plus,dWP3_plus,sizeof(double),cudaMemcpyDeviceToHost));
+       HANDLE_ERROR(cudaMemcpy(WP3_plus,dWP3,sizeof(double),cudaMemcpyDeviceToHost));
 #ifdef DEBUG
        printf("^^ begin CUDA MEMCPY OUT gamma_plus ^^\n");
 #endif
-       HANDLE_ERROR(cudaMemcpy(Gamma_plus,dGamma_plus,sizeof(double),cudaMemcpyDeviceToHost));
+       HANDLE_ERROR(cudaMemcpy(Gamma_plus,dGamma,sizeof(double),cudaMemcpyDeviceToHost));
 	HANDLE_ERROR(cudaStreamSynchronize(0));
        //HANDLE_ERROR(cudaMemcpy(debug,cmplx_debug,sizeof(double2)*Ntri*Nbands*Nbands*nptk,cudaMemcpyDeviceToHost));
 #endif
@@ -624,8 +624,8 @@ void run_cuda_rta_minus_(int* _rank, int* _mm, int* _nband, double* _scalebroad,
     }
     }}
 #else
-        //HANDLE_ERROR(cudaMemset(dGamma_plus,0,sizeof(double)));
-        //HANDLE_ERROR(cudaMemset(dWP3_plus,0,sizeof(double)));
+        //HANDLE_ERROR(cudaMemset(dGamma,0,sizeof(double)));
+        //HANDLE_ERROR(cudaMemset(dWP3,0,sizeof(double)));
 #ifdef DEBUG
         printf("^^ CUDA MEMSET FINISH ^^\n");
 #endif
@@ -634,7 +634,7 @@ void run_cuda_rta_minus_(int* _rank, int* _mm, int* _nband, double* _scalebroad,
 #ifdef DEBUG
        printf("^^ begin CUDA KERNEL ^^\n");
 #endif
-       rta_minus_kernel<<<blk,blksize>>>(Nbands, scalebroad, nptk, T, drlattvec, denergy, dvelocity, deigenvect, NList, dlist, Ntri, dPhi, dR_j, dR_k,  dIndex_i, dIndex_j, dIndex_k, dIJK, dGamma_plus,dWP3_plus, dtypes, dmasses, onlyharmonic, Ngrid[0],Ngrid[1], Ngrid[2],q[0],q[1],q[2], omega, i, ll, d_debug);
+       rta_minus_kernel<<<blk,blksize>>>(Nbands, scalebroad, nptk, T, drlattvec, denergy, dvelocity, deigenvect, NList, dlist, Ntri, dPhi, dR_j, dR_k,  dIndex_i, dIndex_j, dIndex_k, dIJK, dGamma,dWP3, dtypes, dmasses, onlyharmonic, Ngrid[0],Ngrid[1], Ngrid[2],q[0],q[1],q[2], omega, i, ll, d_debug);
 #ifdef DEBUG
        printf("^^ begin CUDA KERNEL SYNC ^^\n");
 #endif
@@ -673,11 +673,11 @@ void run_cuda_rta_minus_(int* _rank, int* _mm, int* _nband, double* _scalebroad,
        printf("^^ finish CUDA KERNEL ^^\n");
        printf("^^ begin CUDA MEMCPY OUT wp3_minus ^^\n");
 #endif
-       HANDLE_ERROR(cudaMemcpy(WP3_minus,dWP3_plus,sizeof(double),cudaMemcpyDeviceToHost));
+       HANDLE_ERROR(cudaMemcpy(WP3_minus,dWP3,sizeof(double),cudaMemcpyDeviceToHost));
 #ifdef DEBUG
        printf("^^ begin CUDA MEMCPY OUT gamma_minus ^^\n");
 #endif
-       HANDLE_ERROR(cudaMemcpy(Gamma_minus,dGamma_plus,sizeof(double),cudaMemcpyDeviceToHost));
+       HANDLE_ERROR(cudaMemcpy(Gamma_minus,dGamma,sizeof(double),cudaMemcpyDeviceToHost));
 	HANDLE_ERROR(cudaStreamSynchronize(0));
        //HANDLE_ERROR(cudaMemcpy(debug,cmplx_debug,sizeof(double2)*Ntri*Nbands*Nbands*nptk,cudaMemcpyDeviceToHost));
 #endif
@@ -713,8 +713,8 @@ void finalize_cuda_rta_() {
         HANDLE_ERROR(cudaFree(dIndex_j));
         HANDLE_ERROR(cudaFree(dIndex_k));
         HANDLE_ERROR(cudaFree(dIJK));
-        HANDLE_ERROR(cudaFree(dGamma_plus));
-        HANDLE_ERROR(cudaFree(dWP3_plus));
+        HANDLE_ERROR(cudaFree(dGamma));
+        HANDLE_ERROR(cudaFree(dWP3));
         HANDLE_ERROR(cudaFree(dlist));
 
     HANDLE_ERROR(cudaDeviceReset());
