@@ -1,3 +1,7 @@
+7.9 finish RTA_plus
+
+7.10 finish RTA_minus
+
 # `ShengBTE`: a solver for the Boltzmann transport equation for phonons
 
 ## Authors:

@@ -828,7 +828,6 @@ contains
     WP3_plus_reduce=0.d00
     WP3_minus_reduce=0.d00
     write(*,*) Ntri, nptk, Nbands
-    open(1, FILE="/home/yx/debug.out", ACCESS="APPEND", ACTION="WRITE")
 
     call init_cuda_RTA_wrapper(rank, Nbands, nptk, rlattvec,energy,velocity,eigenvect,Nlist,List,&
                Ntri,Phi,R_j,R_k,Index_i,Index_j,Index_k,IJK,&
@@ -843,16 +842,19 @@ contains
          call run_cuda_RTA_plus_wrapper(rank, mm, Nbands, scalebroad, nptk, T, rlattvec,energy,velocity,eigenvect,Nlist,List,&
                Ntri,Phi,R_j,R_k,Index_i,Index_j,Index_k,IJK,&
                Gamma_plus,WP3_plus_reduce(mm), types, masses, onlyharmonic, Ngrid, nelements, natoms)
-         write(*,*) "wy-test",mm, Gamma_plus, WP3_plus_reduce(mm)
+         write(*,*) "wy-test-plus",mm, Gamma_plus, WP3_plus_reduce(mm)
           rate_scatt_plus_reduce(i,ll)=Gamma_plus
-          call RTA_minus(mm,energy,velocity,eigenvect,Nlist,List,&
+          !call RTA_minus(mm,energy,velocity,eigenvect,Nlist,List,&
+          !     Ntri,Phi,R_j,R_k,Index_i,Index_j,Index_k,IJK,&
+          !     Gamma_minus,WP3_minus_reduce(mm))
+          call run_cuda_RTA_minus_wrapper(rank, mm, Nbands, scalebroad, nptk, T, rlattvec,energy,velocity,eigenvect,Nlist,List,&
                Ntri,Phi,R_j,R_k,Index_i,Index_j,Index_k,IJK,&
-               Gamma_minus,WP3_minus_reduce(mm))
+               Gamma_minus,WP3_minus_reduce(mm), types, masses, onlyharmonic, Ngrid, nelements, natoms)
+         write(*,*) "wy-test-minus",mm, Gamma_minus, WP3_minus_reduce(mm)
           rate_scatt_minus_reduce(i,ll)=Gamma_minus*5.D-1
        endif
     end do
     call finalize_cuda_RTA_wrapper()
-    close(1)
 
     call MPI_ALLREDUCE(rate_scatt_plus_reduce,rate_scatt_plus,Nbands*Nlist,&
          MPI_DOUBLE_PRECISION,MPI_SUM,MPI_COMM_WORLD,mm)

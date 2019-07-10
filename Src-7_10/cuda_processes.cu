@@ -116,6 +116,10 @@ double_complex Vp_plus(int i,int j,int k,int q,int qprime,int qdprime,
   return Vp_plus_res;
 }
 
+#ifndef NO_CUDA
+__device__
+#endif
+
 double_complex Vp_minus(int i,int j,int k,int q,int qprime,int qdprime,
         double realqprime0, double realqprime1, double realqprime2,
         double realqdprime0, double realqdprime1, double realqdprime2,
@@ -280,9 +284,9 @@ __global__ void rta_minus_kernel(int Nbands, double scalebroad, int nptk, double
     double omegap=energy[ii+j*nptk];
     double fBEprime = 1./(exp(hbar*omegap/Kb/T)-1.);
     //--------BEGIN absorption process-----------
-    int qdprime0 = (q1+qprime0)%Ngrid0;
-    int qdprime1 = (q2+qprime1)%Ngrid1;
-    int qdprime2 = (q3+qprime2)%Ngrid2;
+    int qdprime0 = (q1-qprime0+Ngrid0)%Ngrid0;
+    int qdprime1 = (q2-qprime1+Ngrid1)%Ngrid1;
+    int qdprime2 = (q3-qprime2+Ngrid2)%Ngrid2;
     // realqdprime=matmul(rlattvec,qdprime/dble(ngrid))
     double realqdprime0 = rlattvec[0]*(qdprime0/(double)Ngrid0)+rlattvec[3]*(qdprime1/(double)Ngrid1)+rlattvec[6]*(qdprime2/(double)Ngrid2);
     double realqdprime1 = rlattvec[1]*(qdprime0/(double)Ngrid0)+rlattvec[4]*(qdprime1/(double)Ngrid1)+rlattvec[7]*(qdprime2/(double)Ngrid2);
@@ -579,11 +583,12 @@ void run_cuda_rta_minus_(int* _rank, int* _mm, int* _nband, double* _scalebroad,
     double realqprime2 = rlattvec[2]*(qprime0/(double)Ngrid0)+rlattvec[5]*(qprime1/(double)Ngrid1)+rlattvec[8]*(qprime2/(double)Ngrid2);
     double omegap=energy[ii+j*nptk];
     double fBEprime = 1./(exp(hbar*omegap/Kb/T)-1.);
+//printf("wy-test-fBEprime %f\n", fBEprime);
     //--------BEGIN absorption process-----------
     for(int k=0;k<Nbands;++k) {
-    int qdprime0 = (q1+qprime0)%Ngrid0;
-    int qdprime1 = (q2+qprime1)%Ngrid1;
-    int qdprime2 = (q3+qprime2)%Ngrid2;
+    int qdprime0 = (q1-qprime0+Ngrid0)%Ngrid0;
+    int qdprime1 = (q2-qprime1+Ngrid1)%Ngrid1;
+    int qdprime2 = (q3-qprime2+Ngrid2)%Ngrid2;
     // realqdprime=matmul(rlattvec,qdprime/dble(ngrid))
     double realqdprime0 = rlattvec[0]*(qdprime0/(double)Ngrid0)+rlattvec[3]*(qdprime1/(double)Ngrid1)+rlattvec[6]*(qdprime2/(double)Ngrid2);
     double realqdprime1 = rlattvec[1]*(qdprime0/(double)Ngrid0)+rlattvec[4]*(qdprime1/(double)Ngrid1)+rlattvec[7]*(qdprime2/(double)Ngrid2);
@@ -591,8 +596,10 @@ void run_cuda_rta_minus_(int* _rank, int* _mm, int* _nband, double* _scalebroad,
     int ss = qdprime0+Ngrid0*(qdprime1+qdprime2*Ngrid1);
 //printf("wy-test_ss %d\n",ss);
     double omegadp = energy[ss+k*nptk];
+//printf("wy-test_omegadp %f\n",omegap);
     if (omegap!=0 && omegadp!=0) {
         double sigma=scalebroad*base_sigma( velocity[ii+j*nptk]-velocity[ss+k*nptk], velocity[ii+j*nptk+nptk*Nbands]-velocity[ss+k*nptk+nptk*Nbands], velocity[ii+j*nptk+2*nptk*Nbands]-velocity[ss+k*nptk+2*nptk*Nbands], Ngrid0, Ngrid1, Ngrid2, rlattvec);
+//printf("wy-test-sigma %f\n", sigma);
         if(abs(omega-omegap-omegadp)<=(2.*sigma)) {
             double fBEdprime=1.0/(exp(hbar*omegadp/Kb/T)-1.0);
             double tmp1 = omega-omegap-omegadp;
@@ -600,6 +607,7 @@ void run_cuda_rta_minus_(int* _rank, int* _mm, int* _nband, double* _scalebroad,
                         exp(-(tmp1*tmp1)/(sigma*sigma))/
                         sigma/sqrt(pi)/(omega*omegap*omegadp);
 	    	*WP3_minus += WP3;
+//printf("wy-test-WP3 %f\n", WP3);
             if (!onlyharmonic) {
                 double_complex Vp=Vp_minus(i,j,k,list[ll]-1,ii,ss,
                                    realqprime0,realqprime1,realqprime2,
@@ -684,7 +692,7 @@ void run_cuda_rta_minus_(int* _rank, int* _mm, int* _nband, double* _scalebroad,
 #ifdef DEBUG
        printf("^^ scale ^^\n");
 #endif
-       (*WP3_minus)=(*WP3_minus)*double(5)-1/nptk; //wy
+       (*WP3_minus)=(*WP3_minus)*double(5)-double(1)/nptk; //wy
 #ifdef DEBUG
        printf("^^ CUDA ALL FINISH ^^\n");
 #endif
