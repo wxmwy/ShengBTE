@@ -692,7 +692,7 @@ void run_cuda_rta_minus_(int* _rank, int* _mm, int* _nband, double* _scalebroad,
 #ifdef DEBUG
        printf("^^ scale ^^\n");
 #endif
-       (*WP3_minus)=(*WP3_minus)*double(5)-double(1)/nptk; //wy
+       (*WP3_minus)=(*WP3_minus)*double(5e-1)/nptk; //wy
 #ifdef DEBUG
        printf("^^ CUDA ALL FINISH ^^\n");
 #endif
