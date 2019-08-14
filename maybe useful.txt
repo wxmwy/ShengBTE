@@ -61,8 +61,8 @@ Mem 24 x 16G
 CentOS7.6(内核3.10.0 x86 64)
 GCC v4.8.5
 ICC v2018.5.274
-IFORT v2018.5.274
 CUDA v10.0
+IFORT v2018.5.274
 Intel VTune v2018.4.0.573462
 Intel MPI v2018.4.274
 
@@ -151,3 +151,225 @@ https://www.sciencedirect.com/science/article/pii/S0010465517302059
 http://ftp.aip.org/epaps/appl_phys_lett/E-APPLAB-107-056531/supplemental.pdf
 
 https://www.docin.com/p-1340905550.html
+
+
+NVIDIA 量子化学 GPU
+https://images.nvidia.com/content/tesla/pdf/Quantum-Chemistry-April-2017-MB-slides.pdf
+
+relion
+https://www.sciencedirect.com/science/article/pii/S1047847712002481
+
+relion2
+https://cdn.elifesciences.org/articles/18722/elife-18722-v2.pdf
+
+abinit
+https://dl.acm.org/citation.cfm?id=2872609
+
+GPU加速应用
+https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/tesla-product-literature/gpu-applications-catalog.pdf
+
+hpl hpcg
+
+
+---------------------------------------------
+
+[1] Li, Wu & Carrete Montaña, Jesús & Katcho, Nebil & Mingo, Natalio. (2014). ShengBTE: A solver of the Boltzmann transport equation for phonons. Computer Physics Communications. 185. 1747–1758. 10.1016/j.cpc.2014.02.015. 
+
+(ShengBTE: A solver of the Boltzmann transport equation for phonons
+https://www.sciencedirect.com/science/article/pii/S0010465514000484)
+
+[2] M. Zebarjadi, K. Esfarjani, M.S. Dresselhaus, Z.F. Ren, G. Chen, Perspectives on thermoelectrics: from fundamentals to device applications, Energy Environ. Sci. 5 (2012) 5147–5162.
+
+[3] L.-T. Yeh, R.C. Chu, Thermal Management of Microloectronic Equipment: Heat Transfer Theory, Analysis Methods, and Design Practices, ASME Press, 2002.
+
+[4] C.D.Wright,L.Wang,P.Shah,M.Aziz,E.Varesi,R.Bez,M.Moroni,F.Cazzaniga, The design of rewritable ultrahigh density scanning-probe phase-change memories, IEEE Trans. Nanotechnol. 10 (2011) 900–912.
+
+[5] Green’s-function approach to linear response in solids
+
+[6] Theory of static structural properties, crystal stability, and phase transformations: Application to Si and Ge
+
+[7] Ab initio Force Constant Approach to Phonon Dispersion Relations of Diamond and Graphite
+https://iopscience.iop.org/article/10.1209/0295-5075/32/9/005
+
+
+[8] First-Principles Determination of the Soft Mode in Cubic ZrO2
+https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.78.4063
+
+
+[9]ABINIT: First-principles approach to material and nanosystem properties
+https://www.sciencedirect.com/science/article/pii/S0010465509002276
+
+
+[10]LOBPCG
+https://dl.acm.org/citation.cfm?id=2872609
+
+[11] RELION: Implementation of a Bayesian approach to cryo-EM structure determination
+https://www.sciencedirect.com/science/article/pii/S1047847712002481
+
+
+[12]Accelerated cryo-EM structure determination with parallelisation using GPUs in RELION-2
+https://cdn.elifesciences.org/articles/18722/elife-18722-v2.pdf
+
+
+[13]GPU加速应用
+https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/tesla-product-literature/gpu-applications-catalog.pdf
+
+[14]  Reinders, J.: VTune (TM) Performance Analyzer Essentials: Measurement and Tuning Techniques for Software Developers. Intel Press (2004)
+
+[15] almaBTE
+https://www.sciencedirect.com/science/article/pii/S0010465517302059
+
+[16] J. Callaway, Model for lattice thermal conductivity at low temperatures, Phys. Rev. 113 (1959) 1046–1051.
+https://journals.aps.org/pr/abstract/10.1103/PhysRev.113.1046
+
+[17] P.B. Allen, Improved callaway model for lattice thermal conductivity, Phys. Rev. B 88 (2013) 144302.
+https://journals.aps.org/prb/abstract/10.1103/PhysRevB.88.144302
+
+
+
+
+
+[18] G.Deinzer,G.Birner,D.Strauch,Ab initio calculation of the linewidth of various phonon modes in germanium and silicon, Phys. Rev. B 67 (2003) 144304.
+https://journals.aps.org/prb/abstract/10.1103/PhysRevB.67.144304
+
+
+[19] X. Tang, J. Dong, Pressure dependence of harmonic and anharmonic lattice dynamics in MgO: a first-principles calculation and implications for lattice thermal conductivity, Phys. Earth Planet. Inter. 174 (2009) 33–38.
+https://www.sciencedirect.com/science/article/pii/S0031920108003002
+
+
+[20] Simulation of nanoscale multidimensional transient heat conduction problems using ballistic-diffusive equations and phonon Boltzmann equation
+https://heattransfer.asmedigitalcollection.asme.org/data/journals/jhtrao/27763/298_1.pdf
+
+
+[21] T.Tadano, Y.Gohda, S.Tsuneyuki, Anharmonicforceconstantsextracted from first-principles molecular dynamics: applications to heat transfer simulations, J. Phys.: Condens. Matter 26 (2014) 225402.
+
+[22] A. Togo, L. Chaput, I. Tanaka, Distributions of phonon lifetimes in Brillouin zones, Phys. Rev. B 91 (2015) 094306.
+
+[23] A. Chernatynskiy, S. R. Phillpot, Phonon Transport Simulator (PhonTS), Comp. Phys. Comm. 192 (2015) 196–204.
+
+[24] abinit 3-5倍 
+http://www.fizika.unios.hr/igor-lukacevic/wp-content/uploads/sites/13/2016/07/ABINIT15-merged-IL.pdf
+
+
+[25]https://link.springer.com/article/10.1007/s00371-003-0210-6
+
+[26]https://www.sciencedirect.com/science/article/pii/S0898122109006361#b7
+
+[27]https://www.sciencedirect.com/science/article/pii/S1877050910001213
+
+[28]https://www.sciencedirect.com/science/article/pii/S0045793012000278
+
+[29]https://www.sciencedirect.com/science/article/pii/S0898122111001064
+
+[30]https://www.sciencedirect.com/science/article/pii/S0045793014004733
+
+[31]Williams S, Waterman A, Patterson D. Roofline: An insightful visual performance model for floating-point programs and multicore architectures[R]. Lawrence Berkeley National Lab (LBNL), Berkeley, CA (United States), 2009.
+
+[32]Nvidia Tesla P100 Performance: https://www.nvidia.com/en-us/data-center/tesla-p100/
+P100
+
+[33]Intel® Xeon® Processor E5 v4 Family: https://ark.intel.com/content/www/us/en/ark/products/91754/intel-xeon-processor-e5-2680-v4-35m-cache-2-40-ghz.html
+
+[34]
+https://ieeexplore.ieee.org/document/5644908
+
+
+[35]
+https://www.researchgate.net/publication/271891364_Hands-on_Performance_Tuning_of_3D_Finite_Difference_Earthquake_Simulation_on_GPU_Fermi_Chipset
+
+
+
+硅晶体原子间相互作用力常数的计算与负热膨胀机制的研究
+https://image.hanspub.org/pdf/OJNS20170400000_31872532.pdf
+
+
+https://link.springer.com/chapter/10.1007%2F978-1-4614-8651-0_5
+
+almaBTE
+https://www.sciencedirect.com/science/article/pii/S0010465517302059
+
+http://ftp.aip.org/epaps/appl_phys_lett/E-APPLAB-107-056531/supplemental.pdf
+
+https://www.docin.com/p-1340905550.html
+
+
+NVIDIA 量子化学 GPU
+https://images.nvidia.com/content/tesla/pdf/Quantum-Chemistry-April-2017-MB-slides.pdf
+
+relion
+https://www.sciencedirect.com/science/article/pii/S1047847712002481
+
+relion2
+https://cdn.elifesciences.org/articles/18722/elife-18722-v2.pdf
+
+abinit
+https://dl.acm.org/citation.cfm?id=2872609
+
+GPU加速应用
+https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/tesla-product-literature/gpu-applications-catalog.pdf
+
+
+
+
+
+
+Simulation of nanoscale multidimensional transient heat conduction problems using ballistic-diffusive equations and phonon Boltzmann equation
+https://heattransfer.asmedigitalcollection.asme.org/data/journals/jhtrao/27763/298_1.pdf
+
+
+
+
+
+相关工作
+
+https://www.sciencedirect.com/science/article/pii/S0045793012000278
+https://www.sciencedirect.com/science/article/pii/S0009250913004442
+https://www.sciencedirect.com/science/article/pii/S0045793014004733
+https://www.sciencedirect.com/science/article/pii/S0898122109006361
+
+
+
+
+  { x: 25, y: 25, value: 2290 },
+  { x: 50, y: 25, value: 1552 },
+  { x: 75, y: 25, value: 1030 },
+  { x: 100, y: 25, value: 808 },
+  { x: 125, y: 25, value: 795 },
+  { x: 150, y: 25, value: 804 },
+  { x: 175, y: 25, value: 823 },
+  { x: 200, y: 25, value: 1050 },
+  { x: 25, y: 50, value: 1154 },
+  { x: 50, y: 50, value: 845 },
+  { x: 75, y: 50, value: 1254 },
+  { x: 100, y: 50, value: 828 },
+  { x: 125, y: 50, value: 858 },
+  { x: 150, y: 50, value: 1319 },
+  { x: 25, y: 75, value: 897 },
+  { x: 50, y: 75, value: 890 },
+  { x: 75, y: 75, value: 1332 },
+  { x: 100, y: 75, value: 978 },
+  { x: 25, y: 100, value: 1034 },
+  { x: 50, y: 100, value: 1154 }
+
+
+
+  { x: 20, y: 20, value: 2290 },
+  { x: 50, y: 20, value: 1552 },
+  { x: 80, y: 20, value: 1030 },
+  { x: 110, y: 20, value: 808 },
+  { x: 140, y: 20, value: 795 },
+  { x: 170, y: 20, value: 804 },
+  { x: 200, y: 20, value: 823 },
+  { x: 230, y: 20, value: 1050 },
+  { x: 20, y: 50, value: 1154 },
+  { x: 50, y: 50, value: 845 },
+  { x: 80, y: 50, value: 1254 },
+  { x: 110, y: 50, value: 828 },
+  { x: 140, y: 50, value: 858 },
+  { x: 170, y: 50, value: 1319 },
+  { x: 20, y: 80, value: 897 },
+  { x: 50, y: 80, value: 890 },
+  { x: 80, y: 80, value: 1332 },
+  { x: 110, y: 80, value: 978 },
+  { x: 20, y: 110, value: 1034 },
+  { x: 50, y: 110, value: 1154 }
