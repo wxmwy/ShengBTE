@@ -278,6 +278,32 @@ https://ieeexplore.ieee.org/document/5644908
 https://www.researchgate.net/publication/271891364_Hands-on_Performance_Tuning_of_3D_Finite_Difference_Earthquake_Simulation_on_GPU_Fermi_Chipset
 
 
+[36]
+https://journals.ametsoc.org/doi/pdf/10.1175/bams-d-11-00059.1
+
+[37]
+https://www.researchgate.net/publication/50276103_Formulation_of_the_Dutch_Atmospheric_Large-Eddy_Simulation_DALES_and_overview_of_its_applications
+
+[38]
+
+@inproceedings{abadi2016tensorflow,
+  title={Tensorflow: A system for large-scale machine learning},
+  author={Abadi, Mart{\'\i}n and Barham, Paul and Chen, Jianmin and Chen, Zhifeng and Davis, Andy and Dean, Jeffrey and Devin, Matthieu and Ghemawat, Sanjay and Irving, Geoffrey and Isard, Michael and others},
+  booktitle={12th $\{$USENIX$\}$ Symposium on Operating Systems Design and Implementation ($\{$OSDI$\}$ 16)},
+  pages={265--283},
+  year={2016}
+}
+
+[39]
+@inproceedings{jia2014caffe,
+  title={Caffe: Convolutional architecture for fast feature embedding},
+  author={Jia, Yangqing and Shelhamer, Evan and Donahue, Jeff and Karayev, Sergey and Long, Jonathan and Girshick, Ross and Guadarrama, Sergio and Darrell, Trevor},
+  booktitle={Proceedings of the 22nd ACM international conference on Multimedia},
+  pages={675--678},
+  year={2014},
+  organization={ACM}
+}
+
 
 硅晶体原子间相互作用力常数的计算与负热膨胀机制的研究
 https://image.hanspub.org/pdf/OJNS20170400000_31872532.pdf
