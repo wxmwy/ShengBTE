@@ -1,0 +1,10 @@
+@article{schalkwijk2012high,
+  title={High-performance simulations of turbulent clouds on a desktop PC: Exploiting the GPU},
+  author={Schalkwijk, Jer{\^o}me and Griffith, Eric J and Post, Frits H and Jonker, Harm JJ},
+  journal={Bulletin of the American Meteorological Society},
+  volume={93},
+  number={3},
+  pages={307--314},
+  year={2012},
+  publisher={American Meteorological Society}
+}

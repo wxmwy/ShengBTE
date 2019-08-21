@@ -3,7 +3,6 @@
 
 
 
-
 ShengBTE声子计算的性能分析与GPU加速
 
 
@@ -304,6 +303,7 @@ https://www.researchgate.net/publication/50276103_Formulation_of_the_Dutch_Atmos
   organization={ACM}
 }
 
+[40] http://www.almabte.eu/index.php/database/
 
 硅晶体原子间相互作用力常数的计算与负热膨胀机制的研究
 https://image.hanspub.org/pdf/OJNS20170400000_31872532.pdf
