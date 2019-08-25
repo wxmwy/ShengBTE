@@ -14,12 +14,12 @@ DTRSV_perf = [
 ]
 
 SPMV_AI = [
-    0.0994, 0.0999,0.0996,0.0996,0.0994,0.0994
+    1.42
     #0.0991883,0.0978661,0.0850436,0.098607,0.098607,0.0958967,0.0970855,0.0986889,0.0998498,0.0982512,0.0903348,0.098993,0.0964562,0.0995509,0.0984202,0.0940355,0.0954902,0.0979223,0.09204,0.0920917,0.0949505
 ]
 
 SPMV_perf = [
-    4.1,88.3,318.2,445.5,530,518
+    768.2
     #2.04381,1.28339,1.13244,1.84105,1.79029,0.283703,0.0293527,1.55788,2.19084,1.86182,1.03054,1.39991,1.60371,2.07569,1.79156,0.385395,0.306012,0.212026,0.158356,1.01184,0.110704
     #6.725116271,8.51560734,2.883717646,5.431340457,5.35112155,3.712256416,6.387275788,3.155108004,2.452960253,4.374496231,2.530690137,5.460768375,4.080438712,5.087949338,4.281257029,5.474005407,1.603910098
 ]
@@ -47,8 +47,8 @@ PEAK = 1075
 #pprint(ILP)
 #pprint(SIMD)
 
-max_flops = [PEAK,4700]
-labels = ['CPU Theoretical Peak','GPU Theoretical Peak']
+max_flops = [PEAK,4700, 7000]
+labels = ['CPU Theoretical Peak','P100 Theoretical Peak','V100 Theoretical Peak']
 #max_flops = [PEAK,SIMD, ILP, TLP]
 #labels = ['Theoretical Peak','SIMD', 'ILP', 'TLP']
 
@@ -67,7 +67,7 @@ ax.set_ylabel('Performance (GFlops, log scale) ')
 #ax.set_title('FTP Roofline Model')
 
 # membw = [ 46.8114, 13.0187 ]
-membw = [  76.8,732 ]
+membw = [  76.8,732,900 ]
 
 DGEMM_AI = [ 1.42 ]
 #DGEMM_AI = [ x / 16 for x in [110592,124416,132096] ]
@@ -88,8 +88,13 @@ for i in range(0,1):
     bw = membw[1]
     ax.plot(x, [min(bw*x, float(max_flops[1])) for x in x], color='blue',label=labels[1])
 
+    ax.plot(x, [float(max_flops[2]) for x in x], label=labels[2], color='yellow', linestyle='--')
+    bw = membw[2]
+    ax.plot(x, [min(bw*x, float(max_flops[2])) for x in x], color='yellow',label=labels[2])
+
 plt.text(150, max_flops[0]+10, labels[0], horizontalalignment='center')
 plt.text(150, max_flops[1]+10, labels[1], horizontalalignment='center')
+plt.text(150, max_flops[2]+10, labels[2], horizontalalignment='center')
 #plt.text(0.1, max_flops[2]+5, "+" + labels[2], horizontalalignment='center')
 #plt.text(0.1, max_flops[3]-25, "+" + labels[3], horizontalalignment='center')
 
@@ -101,12 +106,10 @@ plt.text(150, max_flops[1]+10, labels[1], horizontalalignment='center')
 #plt.text(0.4, 24, "+ Memory Affinity", horizontalalignment='center', rotation=40)
 
 ylim_min, ylim_max = ax.get_ylim()
-#ax.vlines(DGEMM_AI[0], ylim_min, min(max_flops[0],DGEMM_AI[0]*membw[0]), colors = "c", linestyles = "dashed")
-#ax.plot([2,2], [min(max_flops[0],2*membw[0]),min(max_flops[1],2*membw[1])], 'r+', markersize=8, markeredgewidth=1)
-#ax.vlines(6400/16, ylim_min, min(max_flops[0],6400/16*membw[0]), colors = "c", linestyles = "dashed")
+
 ax.plot(DGEMM_AI, DGEMM_perf, 'rx', markersize=4, markeredgewidth=1)
 ax.plot(DTRSV_AI, DTRSV_perf, 'bx', markersize=4, markeredgewidth=1)
-#ax.plot(SPMV_AI, SPMV_perf, 'gx', markersize=4, markeredgewidth=1)
+ax.plot(SPMV_AI, SPMV_perf, 'yx', markersize=4, markeredgewidth=1)
 
 #ax.annotate("N Scales", xy=(3.5, 15), xytext=(3.5, 0.1),arrowprops=dict(arrowstyle="->"), horizontalalignment='center')
 
@@ -127,5 +130,5 @@ ax.set_xlim(min(xticks)+0.01, max(xticks))
 # ax.set_yticks([perf, float(max_flops)])
 #ax.set_xticks(xticks+arith_intensity)
 #ax.grid(axis='x', alpha=0.7, linestyle='--')
-fig.savefig('./pdf/roofline_hpl.pdf')
+fig.savefig('./pdf/roofline.pdf')
 plt.show()
