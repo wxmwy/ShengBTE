@@ -1,14 +1,4 @@
-2019.7.28
-
-北京航空航天大学\_中德所
-
-作者@魏一(16061156@buaa.edu.cn)、游心
-
-指导教师@杨海龙
-
-gpu-src是一个GPU版本运行的ShengBTE
-
-data数据集来自ASC19与almaBTE官网数据集，修改了一些参数，不保证科学性仅用作计算热点分析与优化
+This is a GPU optimized version of ShengBTE
 
 # `ShengBTE`: a solver for the Boltzmann transport equation for phonons
 
