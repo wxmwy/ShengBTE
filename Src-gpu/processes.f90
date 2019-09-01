@@ -412,7 +412,7 @@ contains
                Ntri,Phi,R_j,R_k,Index_i,Index_j,Index_k,IJK,&
                Indof2ndPhonon(1:N_plus(mm)),Indof3rdPhonon(1:N_plus(mm)),&
                Gamma0(1:N_plus(mm)),WP3_plus_reduce(mm), types, masses, onlyharmonic, Ngrid, nelements, natoms)
-!write(*,*) "wy-test-WP3", mm,WP3_plus_reduce(mm)
+
           Indof2ndPhonon_plus_reduce((Naccum_plus(mm)+1):(Naccum_plus(mm)+N_plus(mm)))=&
                Indof2ndPhonon(1:N_plus(mm))
           Indof3rdPhonon_plus_reduce((Naccum_plus(mm)+1):(Naccum_plus(mm)+N_plus(mm)))=&
@@ -430,7 +430,7 @@ contains
                Ntri,Phi,R_j,R_k,Index_i,Index_j,Index_k,IJK,&
                Indof2ndPhonon(1:N_minus(mm)),Indof3rdPhonon(1:N_minus(mm)),&
                Gamma0(1:N_minus(mm)),WP3_minus_reduce(mm), types, masses, onlyharmonic, Ngrid, nelements, natoms)
-!write(*,*) "wy-test-WP3", mm,WP3_minus_reduce(mm)
+
           Indof2ndPhonon_minus_reduce((Naccum_minus(mm)+1):(Naccum_minus(mm)+N_minus(mm)))=&
                Indof2ndPhonon(1:N_minus(mm))
           Indof3rdPhonon_minus_reduce((Naccum_minus(mm)+1):(Naccum_minus(mm)+N_minus(mm)))=&
@@ -778,11 +778,11 @@ contains
                    sigma=scalebroad*base_sigma(&
                         velocity(ii,j,:)-&
                         velocity(ss,k,:))
-                   if (abs(omega-omegap-omegadp).le.(2.d0*sigma)) then !wy
+                   if (abs(omega-omegap-omegadp).le.(2.d0*sigma)) then 
                       fBEdprime=1.d0/(exp(hbar*omegadp/Kb/T)-1.D0)
-                      WP3=(fBEprime+fBEdprime+1)*& !wy
+                      WP3=(fBEprime+fBEdprime+1)*& 
                            exp(-(omega-omegap-omegadp)**2/(sigma**2))/sigma/sqrt(Pi)/&
-                           (omega*omegap*omegadp) !wy
+                           (omega*omegap*omegadp) 
                       WP3_minus=WP3_minus+WP3
                       if (.not.onlyharmonic) then
                       Vp=Vp_minus(i,j,k,list(ll),ii,ss,&
@@ -796,7 +796,7 @@ contains
              !--------END emission process-------------
           end do ! ii
        end do  ! j
-       WP3_minus=WP3_minus*5.d-1/nptk !wy
+       WP3_minus=WP3_minus*5.d-1/nptk 
     end if
     Gamma_minus=Gamma_minus*5.60626442*1.d8/nptk
   end subroutine RTA_minus
@@ -858,7 +858,7 @@ contains
          call run_cuda_RTA_plus_wrapper(rank, mm, Nbands, scalebroad, nptk, T, rlattvec,energy,velocity,eigenvect,Nlist,List,&
                Ntri,Phi,R_j,R_k,Index_i,Index_j,Index_k,IJK,&
                Gamma_plus,WP3_plus_reduce(mm), types, masses, onlyharmonic, Ngrid, nelements, natoms)
-         !write(*,*) "wy-test-plus",mm, Gamma_plus, WP3_plus_reduce(mm)
+
           rate_scatt_plus_reduce(i,ll)=Gamma_plus
           !call RTA_minus(mm,energy,velocity,eigenvect,Nlist,List,&
           !     Ntri,Phi,R_j,R_k,Index_i,Index_j,Index_k,IJK,&
@@ -866,7 +866,7 @@ contains
           call run_cuda_RTA_minus_wrapper(rank, mm, Nbands, scalebroad, nptk, T, rlattvec,energy,velocity,eigenvect,Nlist,List,&
                Ntri,Phi,R_j,R_k,Index_i,Index_j,Index_k,IJK,&
                Gamma_minus,WP3_minus_reduce(mm), types, masses, onlyharmonic, Ngrid, nelements, natoms)
-         !write(*,*) "wy-test-minus",mm, Gamma_minus, WP3_minus_reduce(mm)
+
           rate_scatt_minus_reduce(i,ll)=Gamma_minus*5.D-1
        endif
     end do

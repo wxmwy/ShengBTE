@@ -736,7 +736,7 @@ void run_cuda_ind_plus_(int* _rank, int* _mm, int* _nband, double* _scalebroad, 
           
             Indof2ndPhonon_plus[N_plus_count]=ii*Nbands+j+1;
             Indof3rdPhonon_plus[N_plus_count]=ss*Nbands+k+1;           
-//printf( "wy-test-Indof %d %d %d\n", N_plus_count,Indof2ndPhonon_plus[N_plus_count], Indof3rdPhonon_plus[N_plus_count]);
+
 
             double fBEdprime=1.0/(exp(hbar*omegadp/Kb/T)-1.0);
             double absVp2=Vp_plus(i,j,k,list[ll]-1,ii,ss,
@@ -873,7 +873,7 @@ void run_cuda_ind_minus_(int* _rank, int* _mm, int* _nband, double* _scalebroad,
     double realqdprime1 = rlattvec[1]*(qdprime0/(double)Ngrid0)+rlattvec[4]*(qdprime1/(double)Ngrid1)+rlattvec[7]*(qdprime2/(double)Ngrid2);
     double realqdprime2 = rlattvec[2]*(qdprime0/(double)Ngrid0)+rlattvec[5]*(qdprime1/(double)Ngrid1)+rlattvec[8]*(qdprime2/(double)Ngrid2);
     int ss = qdprime0+Ngrid0*(qdprime1+qdprime2*Ngrid1);
-//printf("wy-test_ss %d\n",ss);
+
     double omegadp = energy[ss+k*nptk];
     if (omegap!=0 && omegadp!=0) {
         double sigma=scalebroad*base_sigma( velocity[ii+j*nptk]-velocity[ss+k*nptk], velocity[ii+j*nptk+nptk*Nbands]-velocity[ss+k*nptk+nptk*Nbands], velocity[ii+j*nptk+2*nptk*Nbands]-velocity[ss+k*nptk+2*nptk*Nbands], Ngrid0, Ngrid1, Ngrid2, rlattvec);
@@ -1016,7 +1016,7 @@ void run_cuda_ind_minus_(int* _rank, int* _mm, int* _nband, double* _scalebroad,
     //double realqdprime1 = rlattvec[1]*(qdprime0/(double)Ngrid0)+rlattvec[4]*(qdprime1/(double)Ngrid1)+rlattvec[7]*(qdprime2/(double)Ngrid2);
     //double realqdprime2 = rlattvec[2]*(qdprime0/(double)Ngrid0)+rlattvec[5]*(qdprime1/(double)Ngrid1)+rlattvec[8]*(qdprime2/(double)Ngrid2);
     int ss = qdprime0+Ngrid0*(qdprime1+qdprime2*Ngrid1);
-//printf("wy-test_ss %d\n",ss);
+
     double omegadp = energy[ss+k*nptk];
     if (omegap!=0 && omegadp!=0) {
         double sigma=scalebroad*base_sigma( velocity[ii+j*nptk]-velocity[ss+k*nptk], velocity[ii+j*nptk+nptk*Nbands]-velocity[ss+k*nptk+nptk*Nbands], velocity[ii+j*nptk+2*nptk*Nbands]-velocity[ss+k*nptk+2*nptk*Nbands], Ngrid0, Ngrid1, Ngrid2, rlattvec);
@@ -1040,7 +1040,7 @@ void run_cuda_ind_minus_(int* _rank, int* _mm, int* _nband, double* _scalebroad,
 #ifdef DEBUG
        printf("^^ begin CUDA KERNEL ^^\n");
 #endif
-       //wy to do
+
        rta_plus_kernel<<<blk,blksize>>>(Nbands, scalebroad, nptk, T, drlattvec, denergy, dvelocity, deigenvect, NList, dlist, Ntri, dPhi, dR_j, dR_k,  dIndex_i, dIndex_j, dIndex_k, dIJK, dGamma,dWP3, dtypes, dmasses, onlyharmonic, Ngrid[0],Ngrid[1], Ngrid[2],q[0],q[1],q[2], omega, i, ll, d_debug);
 #ifdef DEBUG
        printf("^^ begin CUDA KERNEL SYNC ^^\n");
@@ -1053,12 +1053,12 @@ void run_cuda_ind_minus_(int* _rank, int* _mm, int* _nband, double* _scalebroad,
        printf("^^ finish CUDA KERNEL ^^\n");
        printf("^^ begin CUDA MEMCPY OUT wp3_plus ^^\n");
 #endif
-       //wy to do
+
        HANDLE_ERROR(cudaMemcpy(WP3_plus,dWP3,sizeof(double),cudaMemcpyDeviceToHost));
 #ifdef DEBUG
        printf("^^ begin CUDA MEMCPY OUT gamma_plus ^^\n");
 #endif
-       //wy to do
+
        HANDLE_ERROR(cudaMemcpy(Gamma_plus,dGamma,sizeof(double),cudaMemcpyDeviceToHost));
 	   HANDLE_ERROR(cudaStreamSynchronize(0));
        //HANDLE_ERROR(cudaMemcpy(debug,cmplx_debug,sizeof(double2)*Ntri*Nbands*Nbands*nptk,cudaMemcpyDeviceToHost));
@@ -1126,7 +1126,7 @@ void run_cuda_rta_plus_(int* _rank, int* _mm, int* _nband, double* _scalebroad, 
     double realqdprime1 = rlattvec[1]*(qdprime0/(double)Ngrid0)+rlattvec[4]*(qdprime1/(double)Ngrid1)+rlattvec[7]*(qdprime2/(double)Ngrid2);
     double realqdprime2 = rlattvec[2]*(qdprime0/(double)Ngrid0)+rlattvec[5]*(qdprime1/(double)Ngrid1)+rlattvec[8]*(qdprime2/(double)Ngrid2);
     int ss = qdprime0+Ngrid0*(qdprime1+qdprime2*Ngrid1);
-//printf("wy-test_ss %d\n",ss);
+
     double omegadp = energy[ss+k*nptk];
     if (omegap!=0 && omegadp!=0) {
         double sigma=scalebroad*base_sigma( velocity[ii+j*nptk]-velocity[ss+k*nptk], velocity[ii+j*nptk+nptk*Nbands]-velocity[ss+k*nptk+nptk*Nbands], velocity[ii+j*nptk+2*nptk*Nbands]-velocity[ss+k*nptk+2*nptk*Nbands], Ngrid0, Ngrid1, Ngrid2, rlattvec);
@@ -1268,7 +1268,7 @@ void run_cuda_rta_minus_(int* _rank, int* _mm, int* _nband, double* _scalebroad,
     double realqprime2 = rlattvec[2]*(qprime0/(double)Ngrid0)+rlattvec[5]*(qprime1/(double)Ngrid1)+rlattvec[8]*(qprime2/(double)Ngrid2);
     double omegap=energy[ii+j*nptk];
     double fBEprime = 1./(exp(hbar*omegap/Kb/T)-1.);
-//printf("wy-test-fBEprime %f\n", fBEprime);
+
     //--------BEGIN absorption process-----------
     for(int k=0;k<Nbands;++k) {
     int qdprime0 = (q1-qprime0+Ngrid0)%Ngrid0;
@@ -1279,12 +1279,12 @@ void run_cuda_rta_minus_(int* _rank, int* _mm, int* _nband, double* _scalebroad,
     double realqdprime1 = rlattvec[1]*(qdprime0/(double)Ngrid0)+rlattvec[4]*(qdprime1/(double)Ngrid1)+rlattvec[7]*(qdprime2/(double)Ngrid2);
     double realqdprime2 = rlattvec[2]*(qdprime0/(double)Ngrid0)+rlattvec[5]*(qdprime1/(double)Ngrid1)+rlattvec[8]*(qdprime2/(double)Ngrid2);
     int ss = qdprime0+Ngrid0*(qdprime1+qdprime2*Ngrid1);
-//printf("wy-test_ss %d\n",ss);
+
     double omegadp = energy[ss+k*nptk];
-//printf("wy-test_omegadp %f\n",omegap);
+
     if (omegap!=0 && omegadp!=0) {
         double sigma=scalebroad*base_sigma( velocity[ii+j*nptk]-velocity[ss+k*nptk], velocity[ii+j*nptk+nptk*Nbands]-velocity[ss+k*nptk+nptk*Nbands], velocity[ii+j*nptk+2*nptk*Nbands]-velocity[ss+k*nptk+2*nptk*Nbands], Ngrid0, Ngrid1, Ngrid2, rlattvec);
-//printf("wy-test-sigma %f\n", sigma);
+
         if(abs(omega-omegap-omegadp)<=(2.*sigma)) {
             double fBEdprime=1.0/(exp(hbar*omegadp/Kb/T)-1.0);
             double tmp1 = omega-omegap-omegadp;
@@ -1292,7 +1292,7 @@ void run_cuda_rta_minus_(int* _rank, int* _mm, int* _nband, double* _scalebroad,
                         exp(-(tmp1*tmp1)/(sigma*sigma))/
                         sigma/sqrt(pi)/(omega*omegap*omegadp);
 	    	*WP3_minus += WP3;
-//printf("wy-test-WP3 %f\n", WP3);
+
             if (!onlyharmonic) {
                 double absVp2=Vp_minus(i,j,k,list[ll]-1,ii,ss,
                                    realqprime0,realqprime1,realqprime2,
@@ -1373,7 +1373,7 @@ void run_cuda_rta_minus_(int* _rank, int* _mm, int* _nband, double* _scalebroad,
 #ifdef DEBUG
        printf("^^ scale ^^\n");
 #endif
-       (*WP3_minus)=(*WP3_minus)*double(5e-1)/nptk; //wy
+       (*WP3_minus)=(*WP3_minus)*double(5e-1)/nptk; 
 #ifdef DEBUG
        printf("^^ CUDA ALL FINISH ^^\n");
 #endif
