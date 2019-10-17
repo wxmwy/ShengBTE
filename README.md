@@ -1,4 +1,10 @@
-This is a GPU optimized version of ShengBTE
+## 1.Src-gpu is a GPU optimized version of ShengBTE.
+We ported the three phonon process to the GPU.
+
+## 2.Src-knl is a version for KNL(or other CPU with a big num cores).
+We have carried out vectorization optimization and multithreading optimization, which can get a good running speed with a small number of processes.
+A smaller number of processes means ShengBTE no longer requires a lot of memory.
+
 
 # `ShengBTE`: a solver for the Boltzmann transport equation for phonons
 
