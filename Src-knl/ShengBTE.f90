@@ -231,9 +231,9 @@ program ShengBTE
   ! Compute the normalized boundary scattering rates.
   allocate(tau_b(Nbands,Nlist))
   allocate(tau_b2(Nbands,nptk))
+  !$OMP PARALLEL DO
   do ll=1,Nlist
      do ii=1,Nbands
-
      	scale = 0.0d+0
         ssq = 1.0d+0
         do ix = 1, 3, 1
@@ -247,13 +247,13 @@ program ShengBTE
                 end if
             end if
         end do
-        tau_b(ii,ll)=1.d00/(scale*sqrt(ssq))
-        
+        tau_b(ii,ll)=1.d00/(scale*sqrt(ssq))        
      end do
   end do
+  !$OMP END PARALLEL DO
+  !$OMP PARALLEL DO
   do ll=1,nptk
      do ii=1,Nbands
-
      	scale = 0.0d+0
         ssq = 1.0d+0
         do ix = 1, 3, 1
@@ -267,12 +267,10 @@ program ShengBTE
                 end if
             end if
         end do
-
         tau_b2(ii,ll)=1.d00/(scale*sqrt(ssq))
-
-
      end do
   end do
+  !$OMP END PARALLEL DO
   if (myid.eq.0) then
      write(aux,"(I0)") Nbands
      open(2,file="BTE.w_boundary",status="replace")
@@ -306,6 +304,7 @@ program ShengBTE
 
 
   allocate(rate_scatt_isotope(Nbands,Nlist))
+  write(*,*),"wy test 4 start"
   if (isotopes) then
      call calc_isotopescatt(energy,velocity,eigenvect,nlist,list,&
           rate_scatt_isotope)
@@ -346,6 +345,7 @@ program ShengBTE
   allocate(Pspace_plus_total(Nbands,Nlist))
   allocate(Pspace_minus_total(Nbands,Nlist))
 
+  write(*,*),"wy test 5 start"
   call NP_driver(energy,velocity,Nlist,List,IJK,&
        N_plus,Pspace_plus_total,N_minus,Pspace_minus_total)
 

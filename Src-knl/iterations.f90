@@ -79,6 +79,7 @@ contains
              Naccum_plus=Naccum_plus+N_plus((ll-1)*Nbands+i-1)
              Naccum_minus=Naccum_minus+N_minus((ll-1)*Nbands+i-1)
           end if
+          !$OMP PARALLEL DO
           do kk=1,Nequi(ll)
              if ((N_plus((ll-1)*Nbands+i).ne.0)) then
                 do jj=1,N_plus((ll-1)*Nbands+i)
@@ -105,6 +106,7 @@ contains
              F_n(i,ALLEquiList(kk,ll),:)=tau_zero(i,ll)*velocity(ALLEquiList(kk,ll),i,:)*&
                   omega(ALLEquiList(kk,ll),i)+tau_zero(i,ll)*DeltaF(i,ALLEquiList(kk,ll),:)
           end do !kk
+          !$OMP END PARALLEL DO
        end do
     end do
   end subroutine iteration

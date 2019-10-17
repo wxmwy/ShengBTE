@@ -56,6 +56,7 @@ contains
     end do    
     do ik=1,nptk
        g=0.0
+       !$OMP PARALLEL DO REDUCTION(+:g)
        do iband=1,nbands
           do itri=1,Ntri
              factor1=phexp(dot_product(kspace(ik,:),R_j(:,itri)))/&
@@ -80,6 +81,7 @@ contains
           grun(ik,iband)=real(g(iband))
        endif
        end do
+       !$OMP END PARALLEL DO
     end do
   end subroutine mode_grun
 

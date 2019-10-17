@@ -65,9 +65,8 @@ contains
     real(kind=8) :: val2
     complex(kind=8) :: tmp1
     complex(kind=8) :: tmp2
-    
     Vp_plus=0.d0
-    !$OMP PARALLEL DO REDUCTION(+:Vp_plus) 
+     
     do ll=1,Ntri
        val1 = dot_product(realqprime,R_j(:,ll))
        val2 = dot_product(realqdprime,R_k(:,ll))
@@ -87,10 +86,9 @@ contains
              end do
           end do
        end do
-       !Vp_plus_all(ll)=prefactor*Vp0
        Vp_plus=Vp_plus+prefactor*Vp0
+       !Vp_plus=prefactor*Vp0
     end do
-    !$OMP END PARALLEL DO
   end function Vp_plus
 
   ! Compute one of the matrix elements involved in the calculation of Ind_minus.
@@ -127,8 +125,9 @@ contains
     real(kind=8) :: val2
     complex(kind=8) :: tmp1
     complex(kind=8) :: tmp2
+
     Vp_minus=0.d0
-    !$OMP PARALLEL DO REDUCTION(+:Vp_minus)
+
     do ll=1,Ntri
        val1 = dot_product(realqprime,R_j(:,ll))
        val2 = dot_product(realqdprime,R_k(:,ll))
@@ -150,7 +149,6 @@ contains
        end do
        Vp_minus=Vp_minus+prefactor*Vp0
     end do
-    !$OMP END PARALLEL DO
   end function Vp_minus
 
   ! Scattering amplitudes of absorption processes.
@@ -193,7 +191,6 @@ contains
     ! Loop over all processes, detecting those that are allowed and
     ! computing their amplitudes.
     if(omega.ne.0) then
-       ! pragma omp simd reduction(+:WP3_plus)
        do j=1,Nbands
           do ii=1,nptk
              qprime=IJK(:,ii)
@@ -405,7 +402,7 @@ contains
     WP3_minus=0.d0
     WP3_plus_reduce=0.d0
     WP3_minus_reduce=0.d0
-
+    !$OMP PARALLEL DO
     do mm=myid+1,Nbands*NList,numprocs
        i=modulo(mm-1,Nbands)+1
        ll=int((mm-1)/Nbands)+1
@@ -436,7 +433,7 @@ contains
           rate_scatt_minus_reduce(i,ll)=sum(Gamma0(1:N_minus(mm)))*5.D-1
        end if
     end do
-
+    !$OMP END PARALLEL DO
     deallocate(Gamma0)
     deallocate(Indof3rdPhonon)
     deallocate(Indof2ndPhonon)
@@ -617,7 +614,7 @@ contains
     N_minus=0
     N_plus_reduce=0
     N_minus_reduce=0
-    !$OMP PARALLEL DO 
+
     do mm=myid+1,Nbands*Nlist,numprocs
        if (energy(List(int((mm-1)/Nbands)+1),modulo(mm-1,Nbands)+1).le.omega_max) then
           call NP_plus(mm,energy,velocity,Nlist,List,IJK,&
@@ -626,7 +623,7 @@ contains
                N_minus_reduce(mm),Pspace_minus_reduce(mm))
        endif
     end do
-    !$OMP END PARALLEL DO
+
     call MPI_ALLREDUCE(N_plus_reduce,N_plus,Nbands*Nlist,MPI_INTEGER,&
          MPI_SUM,MPI_COMM_WORLD,mm)
     call MPI_ALLREDUCE(N_minus_reduce,N_minus,Nbands*Nlist,MPI_INTEGER,&
@@ -693,7 +690,6 @@ contains
                         velocity(ss,k,:))
                    if(abs(omega+omegap-omegadp).le.(2.d0*sigma)) then
                       fBEdprime=1.d0/(exp(hbar*omegadp/Kb/T)-1.D0)
-                      !omp simd
                       WP3=(fBEprime-fBEdprime)*& 
                            exp(-(omega+omegap-omegadp)**2/(sigma**2))/sigma/sqrt(Pi)/&
                            (omega*omegap*omegadp)

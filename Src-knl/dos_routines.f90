@@ -120,6 +120,7 @@ contains
           if(thisomega==0.) then
              cycle
           end if
+          !$OMP PARALLEL DO REDUCTION(+:dos,pdos)
           do ii=1,nptk
              do jj=1,Nbands
                 thissigma=sigma(ii,jj)
@@ -136,6 +137,7 @@ contains
                 end if
              end do
           end do
+          !$OMP END PARALLEL DO
     end do
     dos=dos/float(nptk)
     pdos=pdos/float(nptk)
