@@ -67,10 +67,29 @@ contains
     integer(kind=4) :: ID_equi(Nsymm_rot,nptk),Naccum_plus,Naccum_minus
     integer(kind=4) :: i,j,k,jj,kk,ll,mm,nn
     real(kind=8) :: DeltaF(Nbands,nptk,3)
+    !integer(kind=4) :: N_plus_sum(Nlist),N_minus_sum(Nlist)
 
     call symmetry_map(ID_equi)
+
     DeltaF=0.d0
     do ll=1,Nlist
+       !Naccum_plus=N_plus_sum(Nbands)
+       !Naccum_minus=N_minus_sum(Nbands)
+       !do i=1,Nbands
+       !   if (((ll-1)*Nbands+i).eq.1) then
+       !      Naccum_plus=0
+       !      Naccum_minus=0
+       !      N_plus_sum(i)=Naccum_plus
+       !      N_minus_sum(i)=Naccum_minus
+       !   else
+       !      Naccum_plus=Naccum_plus+N_plus((ll-1)*Nbands+i-1)
+       !      N_plus_sum(i)=Naccum_plus
+       !      Naccum_minus=Naccum_minus+N_minus((ll-1)*Nbands+i-1)
+       !      N_minus_sum(i)=Naccum_minus
+       !   end if
+       !end do
+
+       !OMP PARALLEL DO
        do i=1,Nbands
           if (((ll-1)*Nbands+i).eq.1) then
              Naccum_plus=0
@@ -79,9 +98,11 @@ contains
              Naccum_plus=Naccum_plus+N_plus((ll-1)*Nbands+i-1)
              Naccum_minus=Naccum_minus+N_minus((ll-1)*Nbands+i-1)
           end if
-          !$OMP PARALLEL DO
+          !Naccum_plus=N_plus_sum(i)
+          !Naccum_minus=N_minus_sum(i)
           do kk=1,Nequi(ll)
              if ((N_plus((ll-1)*Nbands+i).ne.0)) then
+                !OMP PARALLEL DO REDUCTION(+:DeltaF)
                 do jj=1,N_plus((ll-1)*Nbands+i)
                    j=modulo(Indof2ndPhonon_plus(Naccum_plus+jj)-1,Nbands)+1
                    mm=int((Indof2ndPhonon_plus(Naccum_plus+jj)-1)/Nbands)+1
@@ -91,8 +112,10 @@ contains
                         Gamma_plus(Naccum_plus+jj)*(F_n(k,ID_equi(TypeofSymmetry(kk,ll),nn),:)-&
                         F_n(j,ID_equi(TypeofSymmetry(kk,ll),mm),:))
                 end do !jj
+                !OMP END PARALLEL DO
              end if
              if ((N_minus((ll-1)*Nbands+i).ne.0)) then
+                !OMP PARALLEL DO REDUCTION(+:DeltaF)
                 do jj=1,N_minus((ll-1)*Nbands+i)
                    j=modulo(Indof2ndPhonon_minus(Naccum_minus+jj)-1,Nbands)+1
                    mm=int((Indof2ndPhonon_minus(Naccum_minus+jj)-1)/Nbands)+1
@@ -102,12 +125,13 @@ contains
                         Gamma_minus(Naccum_minus+jj)*(F_n(k,ID_equi(TypeofSymmetry(kk,ll),nn),:)+&
                         F_n(j,ID_equi(TypeofSymmetry(kk,ll),mm),:))*5.D-1
                 end do !jj
+                !OMP END PARALLEL DO
              end if
              F_n(i,ALLEquiList(kk,ll),:)=tau_zero(i,ll)*velocity(ALLEquiList(kk,ll),i,:)*&
                   omega(ALLEquiList(kk,ll),i)+tau_zero(i,ll)*DeltaF(i,ALLEquiList(kk,ll),:)
           end do !kk
-          !$OMP END PARALLEL DO
        end do
+       !OMP END PARALLEL DO
     end do
   end subroutine iteration
 

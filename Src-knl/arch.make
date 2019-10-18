@@ -1,6 +1,6 @@
-export FFLAGS=-traceback -debug -O2 -static_intel -xhost -qopt-report=5 -qopt-report-phase:vec
-#export FFLAGS=-traceback -debug -O2 -static_intel
-export LDFLAGS=-L/usr/local/spglib/lib -lsymspg
+export FFLAGS=-traceback -debug -O2 -static_intel -xhost -qopt-report=5 -qopt-report-phase:vec -qopenmp
+#export FFLAGS=-traceback -debug -O2 -static_intel -qopenmp
+export LDFLAGS=-L/usr/local/spglib/lib -lsymspg -qopenmp
 export MPIFC=mpiifort
 export MKLROOT=/opt/intel/mkl
 MKL=$(MKLROOT)/lib/intel64/libmkl_lapack95_lp64.a -Wl,--start-group	\

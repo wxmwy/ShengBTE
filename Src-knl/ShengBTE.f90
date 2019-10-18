@@ -304,7 +304,6 @@ program ShengBTE
 
 
   allocate(rate_scatt_isotope(Nbands,Nlist))
-  write(*,*),"wy test 4 start"
   if (isotopes) then
      call calc_isotopescatt(energy,velocity,eigenvect,nlist,list,&
           rate_scatt_isotope)
@@ -345,7 +344,6 @@ program ShengBTE
   allocate(Pspace_plus_total(Nbands,Nlist))
   allocate(Pspace_minus_total(Nbands,Nlist))
 
-  write(*,*),"wy test 5 start"
   call NP_driver(energy,velocity,Nlist,List,IJK,&
        N_plus,Pspace_plus_total,N_minus,Pspace_minus_total)
 
@@ -609,9 +607,11 @@ program ShengBTE
                    Indof2ndPhonon_minus,Indof3rdPhonon_minus,energy,velocity,&
                    Gamma_plus,Gamma_minus,tau_zero,F_n)
               ! Correct F_n to prevent it drifting away from the symmetry of the system.
+              !$OMP PARALLEL DO
               do ll=1,nptk
                  F_n(:,ll,:)=transpose(matmul(symmetrizers(:,:,ll),transpose(F_n(:,ll,:))))
               end do
+              !$OMP END PARALLEL DO
               call TConduct(energy,velocity,F_n,ThConductivity,ThConductivityMode)
               do ll=1,nbands
                  call symmetrize_tensor(ThConductivity(ll,:,:))
@@ -637,12 +637,14 @@ program ShengBTE
         close(2003)
 
         ! Write out the converged scattering rates.
+        !$OMP PARALLEL DO
         do ll=1,Nlist
            do ii=1,Nbands
               tau(ii,ll)=dot_product(F_n(ii,List(ll),:),velocity(List(ll),ii,:))/&
                    (dot_product(velocity(List(ll),ii,:),velocity(List(ll),ii,:))*energy(List(ll),ii))
            end do
         end do
+        !$OMP END PARALLEL DO
         write(aux,"(I0)") Nbands
         open(1,file="BTE.w_final",status="replace")
         do i=1,Nbands
@@ -651,12 +653,14 @@ program ShengBTE
            enddo
         end do
         close(1)
+        !$OMP PARALLEL DO
         do ll=1,nptk
            do ii=1,Nbands
               tau2(ii,ll)=dot_product(F_n(ii,ll,:),velocity(ll,ii,:))/&
                    (dot_product(velocity(ll,ii,:),velocity(ll,ii,:))*energy(ll,ii))
            end do
         end do
+        !$OMP END PARALLEL DO
         write(aux,"(I0)") Nbands
 
         ! If results for nanowires have been requested, obtain a lower bound
