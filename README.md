@@ -1,3 +1,6 @@
+This is a very early copy of the code, please go to the official git to see the latest code.
+https://bitbucket.org/sousaw/shengbte/src/master/
+
 ## 1.Src-gpu is a GPU optimized version of ShengBTE.
 We ported the three phonon process to the GPU.
 
