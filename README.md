@@ -1,4 +1,5 @@
-This is a very early copy of the code, please go to the official git to see the latest code.
+This is a very early copy of the code, please go to the official git to see the latest code. I just accelerated the calculation process of program hotspots and didn't understand the physical meaning. 
+
 https://bitbucket.org/sousaw/shengbte/src/master/
 
 ## 1.Src-gpu is a GPU optimized version of ShengBTE.
